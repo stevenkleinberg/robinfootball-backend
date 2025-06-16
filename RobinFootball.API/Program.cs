@@ -1,6 +1,12 @@
+using RobinFootball.API.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -13,8 +19,12 @@ app.UseSwaggerUI();
 // Disable HTTPS redirection (for now)
 app.UseRouting();
 // app.UseHttpsRedirection(); // comment this out if causing issues
+// app.UseAuthorization(); // optional if you add auth later
 
-// Define routes
+// Register controller routes
+app.MapControllers();
+
+// test endpoint
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
