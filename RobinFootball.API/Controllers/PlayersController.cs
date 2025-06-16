@@ -39,5 +39,43 @@ namespace RobinFootball.API.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player);
         }
+        //PUT /api/Players/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdatePlayer(int id, Player updatedPlayer)
+        {
+            var player = await _context.Players.FindAsync(id);
+            if (player == null)
+            {
+                return NotFound();
+            }
+
+            player.Name = updatedPlayer.Name;
+            player.Position = updatedPlayer.Position;
+            player.Team = updatedPlayer.Team;
+            player.InitialValue = updatedPlayer.InitialValue;
+            player.CurrentValue = updatedPlayer.CurrentValue;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE /api/Players/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeletePlayer(int id)
+        {
+            var player = await _context.Players.FindAsync(id);
+            if (player == null)
+            {
+                return NotFound();
+            }
+
+            _context.Players.Remove(player);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
     }
 }
